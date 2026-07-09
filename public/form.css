@@ -1,0 +1,176 @@
+:root {
+  --morado: #947cb3;        /* barras del PDF */
+  --morado-claro: #a787c0;  /* header del PDF */
+  --morado-oscuro: #5f4b7d;
+  --lila: #e8d5e8;          /* fila EXTRAS del PDF */
+  --lila-fondo: #f5f1f8;
+  --durazno: #f7e4d8;       /* totales del PDF */
+  --salmon: #dfa27e;        /* acento derivado del durazno */
+  --gris: #877e91;
+  --texto: #3a3244;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: var(--lila-fondo);
+  color: var(--texto);
+  padding-bottom: 110px;
+}
+
+header {
+  background: var(--morado-claro);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+header .logo {
+  height: 54px;
+  filter: brightness(0) invert(1);
+}
+.header-textos { display: flex; flex-direction: column; gap: 4px; }
+header .tagline {
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.interno {
+  font-size: 12px;
+  color: var(--morado-oscuro);
+  background: var(--durazno);
+  border-radius: 20px;
+  padding: 2px 12px;
+  align-self: flex-start;
+}
+
+main { max-width: 860px; margin: 0 auto; padding: 20px; }
+
+section {
+  background: #fff;
+  border: 1px solid #e4dcee;
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-bottom: 18px;
+}
+section h2 {
+  margin: 0 0 14px;
+  font-size: 15px;
+  color: var(--morado);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border-bottom: 2px solid var(--lila);
+  padding-bottom: 6px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+label { display: block; font-size: 14px; font-weight: 500; }
+input[type='number'], input[type='text'], input[type='date'], select {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px 10px;
+  border: 1px solid #d9cfe6;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+  color: var(--texto);
+}
+input:focus, select:focus {
+  outline: 2px solid var(--salmon);
+  border-color: transparent;
+}
+input[type='checkbox'] { accent-color: var(--morado); }
+input[readonly] { background: var(--durazno); color: var(--morado-oscuro); font-weight: 600; }
+
+.nota { font-size: 13px; color: var(--gris); margin: 10px 0 0; }
+.hint { font-size: 12.5px; color: var(--gris); font-weight: 400; }
+
+.extra { padding: 10px 0; border-bottom: 1px dashed var(--lila); }
+.extra:last-child { border-bottom: none; }
+.check { display: flex; align-items: baseline; gap: 8px; cursor: pointer; }
+.check input { width: auto; margin: 0; }
+
+.subcampos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 220px));
+  gap: 14px;
+  margin: 10px 0 4px 26px;
+}
+
+.manual {
+  display: grid;
+  grid-template-columns: 160px 140px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 6px 0;
+}
+.manual-label { font-size: 14px; font-weight: 500; }
+.manual input { margin-top: 0; }
+@media (max-width: 640px) {
+  .manual { grid-template-columns: 1fr; }
+}
+
+.anticipo-acciones button {
+  background: #fff;
+  border: 1px solid var(--salmon);
+  color: var(--morado-oscuro);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 6px;
+  margin-right: 6px;
+}
+.anticipo-acciones button:hover { background: var(--durazno); }
+
+footer#barra {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: var(--morado-oscuro);
+  color: #fff;
+  box-shadow: 0 -3px 12px rgba(64, 46, 94, 0.3);
+}
+.barra-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.total-vivo span { font-size: 13px; opacity: 0.85; display: block; }
+.total-vivo strong { font-size: 26px; letter-spacing: 0.5px; color: var(--durazno); }
+
+#btnPdf {
+  background: var(--morado);
+  color: #fff;
+  border: 1px solid var(--morado-claro);
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+#btnPdf:hover { filter: brightness(1.1); }
+#btnPdf:disabled { opacity: 0.6; cursor: wait; }
+
+#errores { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+.error {
+  background: var(--durazno);
+  color: #8a3b1f;
+  border-left: 3px solid var(--salmon);
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 13.5px;
+  margin-top: 8px;
+}

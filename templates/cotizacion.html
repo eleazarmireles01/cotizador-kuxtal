@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    :root {
+      --morado: #947cb3;
+      --morado-claro: #a787c0;
+      --lila: #e8d5e8;
+      --durazno: #f7e4d8;
+      --magenta: #b83280;
+      --borde: #4a3a5e;
+      --texto: #1a1a1a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: var(--texto);
+      font-size: 11.5px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      background: #fff;
+    }
+    .pagina { width: 100%; padding: 16px 34px 10px; }
+
+    /* ===== Header: collage + bloque morado con logo ===== */
+    .header { display: flex; height: 118px; }
+    .collage { flex: 1; display: flex; overflow: hidden; }
+    .collage .ph {
+      flex: 1;
+      height: 100%;
+      margin-left: -22px;
+      clip-path: polygon(18% 0, 100% 0, 82% 100%, 0% 100%);
+    }
+    .collage .ph:nth-child(even) { clip-path: polygon(0 0, 82% 0, 100% 100%, 18% 100%); }
+    .collage .ph:first-child { margin-left: 0; clip-path: polygon(0 0, 100% 0, 82% 100%, 0 100%); }
+    .collage .ph img { width: 100%; height: 100%; object-fit: cover; }
+    .bloque-logo {
+      width: 175px;
+      background: var(--morado-claro);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 10px;
+      margin-left: -14px;
+    }
+    .bloque-logo img {
+      width: 130px;
+      filter: brightness(0) invert(1);
+    }
+    .tagline {
+      color: #fff;
+      font-size: 6.8px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+
+    /* ===== Intro ===== */
+    .intro { margin-top: 10px; text-align: justify; line-height: 1.38; font-size: 10.8px; }
+    .intro p { margin-bottom: 4px; }
+
+    /* ===== Orden ajustada ===== */
+    .orden-bar {
+      background: var(--morado);
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 6px 12px;
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .fechas-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+    .fechas-izq { display: flex; gap: 34px; }
+    .cajita { width: 130px; }
+    .cajita .cab {
+      border: 2px solid var(--morado);
+      border-left: 4px solid var(--magenta);
+      text-align: center;
+      font-weight: 700;
+      font-size: 9.5px;
+      color: var(--magenta);
+      padding: 4px 2px;
+      background: #fff;
+    }
+    .cajita .val {
+      border: 1px solid #999;
+      border-top: none;
+      text-align: right;
+      padding: 4px 8px;
+      font-size: 11px;
+    }
+    .saludo { margin-top: 8px; font-size: 11px; }
+
+    /* ===== Tabla principal ===== */
+    table.principal {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+      border-left: 3px solid #1a1a1a;
+    }
+    table.principal tr { page-break-inside: avoid; break-inside: avoid; }
+    tbody.no-cortar { page-break-inside: avoid; break-inside: avoid; }
+    table.principal td {
+      border: 1px solid #b9b9b9;
+      padding: 3px 8px;
+      vertical-align: middle;
+      height: 15px;
+    }
+    .col-concepto { width: 47%; }
+    .col-a { width: 19%; text-align: right; }
+    .col-b { width: 18%; text-align: right; }
+    .col-c { width: 16%; text-align: right; }
+
+    td.hdr {
+      background: var(--morado);
+      color: #fff;
+      font-weight: 700;
+      text-align: center;
+      border-color: var(--borde);
+    }
+    td.hdr-blanco { font-weight: 700; text-align: center; }
+    td.banda {
+      background: var(--morado);
+      color: #fff;
+      font-weight: 700;
+      border-color: var(--borde);
+    }
+    td.banda-val { background: var(--morado); color: #fff; font-weight: 700; text-align: right; border-color: var(--borde); }
+    td.lila { background: var(--lila); font-weight: 700; }
+    td.durazno { background: var(--durazno); font-weight: 700; border-color: #1a1a1a; }
+    td.gris-centro { background: #ececec; text-align: center; }
+    .chico { font-size: 8.5px; }
+    .coffee-lista { line-height: 1.5; font-size: 10.5px; }
+    .desc-extra { font-size: 9.5px; font-style: italic; color: #555; }
+    /* ===== Términos: fluyen después de la tabla ===== */
+    .terminos-texto {
+      margin-top: 12px;
+      line-height: 1.5;
+      font-size: 11px;
+      text-align: justify;
+      page-break-inside: avoid;
+    }
+    .terminos-texto strong { display: block; margin-top: 2px; }
+  </style>
+</head>
+<body>
+
+  <!-- ============ PÁGINA 1 ============ -->
+  <div class="pagina">
+    <div class="header">
+      <div class="collage">
+        <div class="ph"><img src="{{FOTO_1}}" /></div>
+        <div class="ph"><img src="{{FOTO_2}}" /></div>
+        <div class="ph"><img src="{{FOTO_3}}" /></div>
+        <div class="ph"><img src="{{FOTO_4}}" /></div>
+        <div class="ph"><img src="{{FOTO_5}}" /></div>
+        <div class="ph"><img src="{{FOTO_6}}" /></div>
+      </div>
+      <div class="bloque-logo">
+        <img src="{{LOGO}}" />
+        <div class="tagline">EL ÚNICO DESTINO ES TU INTERIOR</div>
+      </div>
+    </div>
+
+    <div class="intro">
+      <p>Casa Kuxtal es un lugar mágico donde podrás impartir retiros y experiencias vivenciales grupales con el objetivo de fortalecer estrategias, generar cambios positivos en los individuos. En Casa Kuxtal los huéspedes pueden sumergirse en un ambiente tranquilo y amoroso, rodeado de belleza natural.</p>
+      <p>Las experiencias ofrecidas están diseñadas para fomentar la introspección, el crecimiento persona y el trabajo en equipo. A través de actividades guiadas, meditaciones y prácticas de conexión con la naturaleza. Casa Kuxtal brinda oportunidad de renovar la energía y encontrar el equilibrio entre cuerpo, mente y espíritu.</p>
+      <p>Con una atención personalizada y un ambiente acogedor, Casa Kuxtal se convierte en el escenario ideal para desconectarse de la rutina, reflexionar sobre el camino profesional y personal, así como fortalecer la cohesión grupal. Cada detalle está diseñado para brindar una experiencia transformadora y enriquecedora que inspire a los visitantes a descubrir su verdadero potencial y alcanzar un estado de plenitud.</p>
+    </div>
+
+    <div class="orden-bar">
+      <span>ORDEN AJUSTADA</span>
+      <span>Fecha: {{FECHA_EMISION}}</span>
+    </div>
+
+    <div class="fechas-row">
+      <div class="fechas-izq">
+        <div class="cajita">
+          <div class="cab">FECHA INGRESO</div>
+          <div class="val">{{FECHA_INGRESO}}</div>
+        </div>
+        <div class="cajita">
+          <div class="cab">FECHA SALIDA</div>
+          <div class="val">{{FECHA_SALIDA}}</div>
+        </div>
+      </div>
+      <div class="cajita">
+        <div class="cab">PARTICIPANTES</div>
+        <div class="val">{{PARTICIPANTES}}</div>
+      </div>
+    </div>
+
+    <div class="saludo">Es para nosotros un gusto poder atender su solicitud de estancia, Casa Kuxtal. Con base en lo solicitado anexo lo siguiente:</div>
+
+    <table class="principal">
+      <tr>
+        <td class="hdr col-concepto">HOSPEDAJE</td>
+        <td class="hdr-blanco col-a">HAB SENCILLA</td>
+        <td class="hdr-blanco col-b">HAB DOBLE</td>
+        <td class="col-c"></td>
+      </tr>
+      <tr>
+        <td class="gris-centro">COSTO POR PERSONA, POR NOCHE</td>
+        <td class="col-a">{{PRECIO_SENCILLA}}</td>
+        <td class="col-b">{{PRECIO_DOBLE}}</td>
+        <td class="col-c"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="col-a">{{PAX_SENCILLA}}</td>
+        <td class="col-b">{{PAX_DOBLE}}</td>
+        <td class="col-c"></td>
+      </tr>
+      <tr>
+        <td class="chico">INCLUYE 3 ALIMENTOS POR NOCHE PAGADA, POR PERSONA</td>
+        <td class="col-a">{{SUB_SENCILLA}}</td>
+        <td class="col-b">{{SUB_DOBLE}}</td>
+        <td class="col-c">$ -</td>
+      </tr>
+      <tr>
+        <td class="banda">TOTAL HOSPEDAJE</td>
+        <td class="banda-val" colspan="3">{{TOTAL_HOSPEDAJE}}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="hdr-blanco" colspan="3">ALIMENTOS REQUERIDOS</td>
+      </tr>
+      <tr>
+        <td>DESAYUNO</td>
+        <td class="col-a">{{PRECIO_DESAYUNO}}</td>
+        <td class="col-b">{{CANT_DESAYUNO}}</td>
+        <td class="col-c">{{IMP_DESAYUNO}}</td>
+      </tr>
+      <tr>
+        <td>COMIDA</td>
+        <td class="col-a">{{PRECIO_COMIDA}}</td>
+        <td class="col-b">{{CANT_COMIDA}}</td>
+        <td class="col-c">{{IMP_COMIDA}}</td>
+      </tr>
+      <tr>
+        <td>CENA</td>
+        <td class="col-a">{{PRECIO_CENA}}</td>
+        <td class="col-b">{{CANT_CENA}}</td>
+        <td class="col-c">{{IMP_CENA}}</td>
+      </tr>
+      {{FILA_COFFEE}}
+      <tr>
+        <td class="banda">TOTAL ALIMENTOS</td>
+        <td class="banda-val" colspan="3">{{TOTAL_ALIMENTOS}}</td>
+      </tr>
+      <tr><td colspan="4" style="border-left:none;border-right:none;"></td></tr>
+      <tr>
+        <td class="lila">EXTRAS</td>
+        <td class="lila" style="text-align:left;">$</td>
+        <td class="lila" colspan="2" style="text-align:right;">{{TOTAL_EXTRAS}}</td>
+      </tr>
+      {{FILAS_EXTRAS}}
+      <tbody class="no-cortar">
+      <tr>
+        <td class="banda">NOCHES</td>
+        <td class="banda-val" colspan="3">{{NOCHES}}</td>
+      </tr>
+      <tr>
+        <td class="durazno">TOTAL POR PERSONA</td>
+        <td class="durazno" style="text-align:left;">$</td>
+        <td class="durazno" colspan="2" style="text-align:right;">{{TOTAL_POR_PERSONA}}</td>
+      </tr>
+      <tr>
+        <td class="durazno">TOTAL MAS EXTRAS</td>
+        <td class="durazno" style="text-align:left;">$</td>
+        <td class="durazno" colspan="2" style="text-align:right;">{{TOTAL_MAS_EXTRAS}}</td>
+      </tr>
+      <tr>
+        <td class="durazno">IVA</td>
+        <td class="durazno" style="text-align:left;">$</td>
+        <td class="durazno" colspan="2" style="text-align:right;">{{IVA}}</td>
+      </tr>
+      <tr>
+        <td class="durazno">SUB TOTAL</td>
+        <td class="durazno" style="text-align:left;">$</td>
+        <td class="durazno" colspan="2" style="text-align:right;">{{SUB_TOTAL}}</td>
+      </tr>
+      <tr>
+        <td class="durazno">ANTICIPO</td>
+        <td class="durazno" style="text-align:left;">{{ANTICIPO_SIGNO}}</td>
+        <td class="durazno" colspan="2" style="text-align:right;">{{ANTICIPO}}</td>
+      </tr>
+      <tr>
+        <td class="durazno">TOTAL POR PAGAR</td>
+        <td class="durazno" style="text-align:left;">$</td>
+        <td class="durazno" colspan="2" style="text-align:right;">{{TOTAL_POR_PAGAR}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="terminos-texto">
+      Anticipo del 30% para reservar la fecha. Se deberá liquidar a más tardar 5 días previos al evento. Precio + 16% de IVA. Por favor si requiere algo extra, háganoslo saber para poderle brindar el servicio en tiempo y forma.
+      <strong>Somos el lugar del como sí, por lo que nuestra misión es esmerarnos al máximo para que el tiempo que estén en Casa Kuxtal sea memorable.</strong>
+    </div>
+  </div>
+
+</body>
+</html>

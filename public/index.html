@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cotizador · Casa Kuxtal (uso interno)</title>
+  <link rel="stylesheet" href="form.css" />
+</head>
+<body>
+  <header>
+    <img src="/assets/logo.png" alt="Casa Kuxtal" class="logo" />
+    <div class="header-textos">
+      <span class="tagline">EL ÚNICO DESTINO ES TU INTERIOR</span>
+      <span class="interno">Cotizador interno — el cliente solo ve el PDF</span>
+    </div>
+  </header>
+
+  <main>
+    <form id="cotizador" autocomplete="off">
+
+      <section>
+        <h2>Datos del evento</h2>
+        <div class="grid">
+          <label>Nombre del cliente / evento
+            <input type="text" id="cliente" placeholder="Ej. Pravana" />
+          </label>
+          <label>Fecha de ingreso
+            <input type="date" id="fechaIngreso" />
+          </label>
+          <label>Fecha de salida
+            <input type="date" id="fechaSalida" />
+          </label>
+        </div>
+      </section>
+
+      <section>
+        <h2>Hospedaje</h2>
+        <div class="grid">
+          <label>Pax en habitación doble ($2,500 /persona/noche)
+            <input type="number" id="paxDoble" min="0" value="0" />
+          </label>
+          <label>Pax en habitación sencilla ($3,800 /persona/noche)
+            <input type="number" id="paxSencilla" min="0" value="0" />
+          </label>
+          <label>Noches
+            <input type="number" id="noches" min="0" value="0" />
+          </label>
+          <label>Participantes (auto)
+            <input type="number" id="participantes" readonly tabindex="-1" />
+          </label>
+        </div>
+        <p class="nota">Incluye 3 alimentos tipo bufete por noche pagada (no incluye bebidas alcohólicas). Participantes = pax doble + pax sencilla.</p>
+      </section>
+
+      <section>
+        <h2>Extras</h2>
+
+        <div class="extra">
+          <label class="check"><input type="checkbox" id="fogataCheck" /> Fogata <span class="hint">(2 horas · tiers: ≤20 $2,500 · ≤50 $4,500 · ≤100 $6,500)</span></label>
+          <div class="subcampos" data-for="fogataCheck">
+            <label>Pax asistentes a la fogata
+              <input type="number" id="fogataPax" min="0" max="100" value="0" />
+            </label>
+          </div>
+        </div>
+
+        <div class="extra">
+          <label class="check"><input type="checkbox" id="salonCheck" /> Salón + audiovisual <span class="hint">($15,000 flat)</span></label>
+          <div class="subcampos" data-for="salonCheck">
+            <label>% de cortesía
+              <input type="number" id="salonCortesia" min="0" max="100" value="0" />
+            </label>
+          </div>
+        </div>
+
+        <div class="extra">
+          <label class="check"><input type="checkbox" id="temazcalCheck" /> Temazcal <span class="hint">($1,100 /persona · mínimo 6 pax)</span></label>
+          <div class="subcampos" data-for="temazcalCheck">
+            <label>Pax
+              <input type="number" id="temazcalPax" min="0" value="0" />
+            </label>
+          </div>
+        </div>
+
+        <div class="extra">
+          <label class="check"><input type="checkbox" id="pizzaCheck" /> Taller de pizza <span class="hint">($1,600 /persona · mínimo 10 pax · incluye copa de vino + quesos)</span></label>
+          <div class="subcampos" data-for="pizzaCheck">
+            <label>Pax
+              <input type="number" id="pizzaPax" min="0" value="0" />
+            </label>
+          </div>
+        </div>
+
+        <div class="extra">
+          <label class="check"><input type="checkbox" id="pinturaCheck" /> Taller de pintura <span class="hint">($1,600 /persona · mínimo 10 pax · incluye copa de vino + quesos)</span></label>
+          <div class="subcampos" data-for="pinturaCheck">
+            <label>Pax
+              <input type="number" id="pinturaPax" min="0" value="0" />
+            </label>
+          </div>
+        </div>
+
+        <div class="extra">
+          <label class="check"><input type="checkbox" id="gongsCheck" /> Noche de Gongs <span class="hint">($28,000 flat · evento mínimo 6 pax)</span></label>
+        </div>
+
+        <div class="extra">
+          <label class="check"><input type="checkbox" id="calderaCheck" /> Caldera de alberca <span class="hint">($6,500 flat por evento)</span></label>
+        </div>
+
+        <div class="extra">
+          <label class="check"><input type="checkbox" id="coffeeCheck" /> Coffee break sencillo <span class="hint">($110 /persona · al 100% de cortesía aparece como "incluido" con su lista)</span></label>
+          <div class="subcampos" data-for="coffeeCheck">
+            <label>Pax
+              <input type="number" id="coffeePax" min="0" value="0" />
+            </label>
+            <label>% de cortesía
+              <input type="number" id="coffeeCortesia" min="0" max="100" value="0" />
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Alimentos extra</h2>
+        <div class="grid">
+          <label>Desayunos ($340 c/u)
+            <input type="number" id="desayunosExtra" min="0" value="0" />
+          </label>
+          <label>Comidas ($440 c/u)
+            <input type="number" id="comidasExtra" min="0" value="0" />
+          </label>
+          <label>Cenas ($340 c/u)
+            <input type="number" id="cenasExtra" min="0" value="0" />
+          </label>
+        </div>
+      </section>
+
+      <section>
+        <h2>Servicios manuales</h2>
+        <p class="nota">Monto directo, sin multiplicar. Descripción opcional (aparece en el PDF debajo del concepto).</p>
+        <div class="manual" data-key="open_bar_nacional" data-label="Open bar nacional">
+          <span class="manual-label">Open bar nacional</span>
+          <input type="number" class="manual-monto" min="0" step="0.01" placeholder="Monto $" />
+          <input type="text" class="manual-desc" placeholder="Descripción (opcional)" />
+        </div>
+        <div class="manual" data-key="open_bar_importada" data-label="Open bar importada">
+          <span class="manual-label">Open bar importada</span>
+          <input type="number" class="manual-monto" min="0" step="0.01" placeholder="Monto $" />
+          <input type="text" class="manual-desc" placeholder="Descripción (opcional)" />
+        </div>
+        <div class="manual" data-key="traslados" data-label="Traslados">
+          <span class="manual-label">Traslados</span>
+          <input type="number" class="manual-monto" min="0" step="0.01" placeholder="Monto $" />
+          <input type="text" class="manual-desc" placeholder="Descripción (opcional)" />
+        </div>
+        <div class="manual" data-key="mobiliario_extra" data-label="Mobiliario extra">
+          <span class="manual-label">Mobiliario extra</span>
+          <input type="number" class="manual-monto" min="0" step="0.01" placeholder="Monto $" />
+          <input type="text" class="manual-desc" placeholder="Descripción (opcional)" />
+        </div>
+        <div class="manual" data-key="musica_dj" data-label="Música / DJ">
+          <span class="manual-label">Música / DJ</span>
+          <input type="number" class="manual-monto" min="0" step="0.01" placeholder="Monto $" />
+          <input type="text" class="manual-desc" placeholder="Descripción (opcional)" />
+        </div>
+      </section>
+
+      <section>
+        <h2>Anticipo</h2>
+        <div class="grid">
+          <label>Anticipo (editable — vacío = fila en blanco en el PDF)
+            <input type="number" id="anticipo" min="0" step="0.01" placeholder="Vacío = en blanco" />
+          </label>
+          <div class="anticipo-acciones">
+            <span class="nota" id="anticipoSugerido">Sugerido (30%): $0.00</span><br />
+            <button type="button" id="btnUsarSugerido">Usar sugerido</button>
+            <button type="button" id="btnLimpiarAnticipo">Dejar en blanco</button>
+          </div>
+        </div>
+      </section>
+
+    </form>
+  </main>
+
+  <footer id="barra">
+    <div id="errores"></div>
+    <div class="barra-inner">
+      <div class="total-vivo">
+        <span id="desgloseVivo">Subtotal $0.00 · IVA $0.00</span>
+        <strong id="totalVivo">$0.00</strong>
+      </div>
+      <button type="button" id="btnPdf">Generar PDF</button>
+    </div>
+  </footer>
+
+  <script src="form.js"></script>
+</body>
+</html>

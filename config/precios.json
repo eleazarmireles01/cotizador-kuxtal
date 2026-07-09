@@ -1,0 +1,48 @@
+{
+  "hospedaje": {
+    "doble": { "precio": 2500, "unidad": "persona/noche" },
+    "sencilla": { "precio": 3800, "unidad": "persona/noche" }
+  },
+  "alimentos_incluidos": "3 tipo bufete por noche pagada, no incluye bebidas alcohólicas",
+  "extras": {
+    "fogata": {
+      "tiers": [
+        { "max_pax": 20, "precio": 2500 },
+        { "max_pax": 50, "precio": 4500 },
+        { "max_pax": 100, "precio": 6500 }
+      ],
+      "duracion": "2 horas",
+      "capacidad_max": 100
+    },
+    "salon_audiovisual": {
+      "precio_base": 15000,
+      "tipo": "flat",
+      "cortesia": { "tipo": "porcentaje_variable", "default_pct": 0, "rango": [0, 100] }
+    },
+    "temazcal": { "precio": 1100, "unidad": "persona", "minimo_pax": 6 },
+    "taller_pizza": { "precio": 1600, "unidad": "persona", "minimo_pax": 10, "incluye": "copa de vino + degustación de quesos" },
+    "taller_pintura": { "precio": 1600, "unidad": "persona", "minimo_pax": 10, "incluye": "copa de vino + degustación de quesos" },
+    "noche_gongs": { "precio": 28000, "tipo": "flat", "minimo_pax": 6 },
+    "caldera_alberca": { "precio": 6500, "tipo": "flat_evento" },
+    "coffee_break_sencillo": {
+      "precio": 110,
+      "unidad": "persona",
+      "cortesia": { "tipo": "porcentaje_variable", "default_pct": 0, "rango": [0, 100] }
+    }
+  },
+  "comidas_extra": {
+    "comida": { "precio": 440, "unidad": "persona" },
+    "desayuno": { "precio": 340, "unidad": "persona" },
+    "cena": { "precio": 340, "unidad": "persona" }
+  },
+  "iva_pct": 16,
+  "anticipo_sugerido_pct": 30,
+  "coffee_break_incluye": ["CAFÉ", "TÉ", "GALLETAS", "CRUDITES", "AGUA INFUSIONADA", "AGUA DE SABOR"],
+  "servicios_manuales": {
+    "open_bar_nacional": { "monto": 0, "descripcion": "", "tipo": "manual" },
+    "open_bar_importada": { "monto": 0, "descripcion": "", "tipo": "manual" },
+    "traslados": { "monto": 0, "descripcion": "", "tipo": "manual" },
+    "mobiliario_extra": { "monto": 0, "descripcion": "", "tipo": "manual" },
+    "musica_dj": { "monto": 0, "descripcion": "", "tipo": "manual" }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "cotizador-kuxtal",
+  "version": "1.0.0",
+  "description": "Cotizador interno Casa Kuxtal",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1",
+    "playwright": "1.48.0"
+  }
+}
