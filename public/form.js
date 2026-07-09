@@ -51,9 +51,34 @@ function calcular() {
   const errores = [];
   const paxDoble = num('paxDoble');
   const paxSencilla = num('paxSencilla');
-  const noches = num('noches');
-  const participantes = paxDoble + paxSencilla;
+  const paxDia = num('paxDia');
+  const paxHospedados = paxDoble + paxSencilla;
+  const participantes = paxHospedados + paxDia;
   $('participantes').value = participantes;
+
+  // Noches auto: fecha_salida − fecha_ingreso en días.
+  // 0 noches es válido solo para eventos de puro día (sin hospedados).
+  const ingresoIso = $('fechaIngreso').value;
+  const salidaIso = $('fechaSalida').value;
+  let noches = 0;
+  if (ingresoIso && salidaIso) {
+    const dias = Math.round((Date.parse(salidaIso) - Date.parse(ingresoIso)) / 86400000);
+    if (dias < 0) {
+      errores.push('La fecha de salida debe ser igual o posterior a la fecha de ingreso.');
+    } else {
+      noches = dias;
+      if (dias === 0 && paxHospedados > 0) {
+        errores.push('Si hay participantes hospedados, debe haber al menos 1 noche.');
+      }
+    }
+  } else {
+    errores.push('Indica las fechas de ingreso y salida (las noches se calculan solas).');
+  }
+  $('noches').value = noches;
+
+  if (paxDoble % 2 !== 0) {
+    errores.push('Pax en habitación doble debe ser un número par (2 personas por habitación).');
+  }
 
   // --- Hospedaje mixto: (2500×doble + 3800×sencilla) × noches ---
   const pDoble = config.hospedaje.doble.precio;
@@ -64,8 +89,7 @@ function calcular() {
   };
   hospedaje.total = hospedaje.subDoble + hospedaje.subSencilla;
 
-  if (participantes <= 0) errores.push('Indica al menos un participante hospedado.');
-  if (noches <= 0) errores.push('Indica el número de noches.');
+  if (participantes <= 0) errores.push('Indica al menos un participante (hospedado o de uso de día).');
 
   // --- Alimentos extra ---
   const alimentos = {};
@@ -190,6 +214,7 @@ function calcular() {
     fechaSalida: fechaCorta($('fechaSalida').value),
     paxDoble,
     paxSencilla,
+    paxDia,
     noches,
     participantes,
     hospedaje,

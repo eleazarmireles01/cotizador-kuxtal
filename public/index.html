@@ -42,14 +42,17 @@
           <label>Pax en habitación sencilla ($3,800 /persona/noche)
             <input type="number" id="paxSencilla" min="0" value="0" />
           </label>
-          <label>Noches
-            <input type="number" id="noches" min="0" value="0" />
+          <label>Participantes de uso de día (sin hospedaje)
+            <input type="number" id="paxDia" min="0" value="0" />
+          </label>
+          <label>Noches (auto: salida − ingreso)
+            <input type="number" id="noches" readonly tabindex="-1" />
           </label>
           <label>Participantes (auto)
             <input type="number" id="participantes" readonly tabindex="-1" />
           </label>
         </div>
-        <p class="nota">Incluye 3 alimentos tipo bufete por noche pagada (no incluye bebidas alcohólicas). Participantes = pax doble + pax sencilla.</p>
+        <p class="nota">Incluye 3 alimentos tipo bufete por noche pagada (no incluye bebidas alcohólicas). Participantes = doble + sencilla + uso de día. Con fechas iguales (0 noches) solo se permite evento de puro día, sin hospedados.</p>
       </section>
 
       <section>

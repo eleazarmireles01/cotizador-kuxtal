@@ -26,6 +26,39 @@ function dataUri(file) {
   return `data:${mime};base64,${fs.readFileSync(path.join(__dirname, 'assets', file)).toString('base64')}`;
 }
 
+function bloqueHospedaje(d, config) {
+  if (!(d.paxDoble > 0) && !(d.paxSencilla > 0)) return ''; // evento de puro día: sin sección de hospedaje
+  return `
+      <tr>
+        <td class="hdr col-concepto">HOSPEDAJE</td>
+        <td class="hdr-blanco col-a">HAB SENCILLA</td>
+        <td class="hdr-blanco col-b">HAB DOBLE</td>
+        <td class="col-c"></td>
+      </tr>
+      <tr>
+        <td class="gris-centro">COSTO POR PERSONA, POR NOCHE</td>
+        <td class="col-a">${money(config.hospedaje.sencilla.precio)}</td>
+        <td class="col-b">${money(config.hospedaje.doble.precio)}</td>
+        <td class="col-c"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="col-a">${d.paxSencilla > 0 ? esc(d.paxSencilla) : ''}</td>
+        <td class="col-b">${d.paxDoble > 0 ? esc(d.paxDoble) : ''}</td>
+        <td class="col-c"></td>
+      </tr>
+      <tr>
+        <td class="chico">INCLUYE 3 ALIMENTOS POR NOCHE PAGADA, POR PERSONA</td>
+        <td class="col-a">${d.paxSencilla > 0 ? money(d.hospedaje.subSencilla) : '$ -'}</td>
+        <td class="col-b">${d.paxDoble > 0 ? money(d.hospedaje.subDoble) : '$ -'}</td>
+        <td class="col-c">$ -</td>
+      </tr>
+      <tr>
+        <td class="banda">TOTAL HOSPEDAJE</td>
+        <td class="banda-val" colspan="3">${money(d.hospedaje.total)}</td>
+      </tr>`;
+}
+
 function filaCoffee(coffee, incluye) {
   if (!coffee) return '';
   if (coffee.modo === 'incluido') {
@@ -100,13 +133,7 @@ app.post('/pdf', async (req, res) => {
       FECHA_INGRESO: esc(d.fechaIngreso || ''),
       FECHA_SALIDA: esc(d.fechaSalida || ''),
       PARTICIPANTES: esc(d.participantes),
-      PRECIO_SENCILLA: money(config.hospedaje.sencilla.precio),
-      PRECIO_DOBLE: money(config.hospedaje.doble.precio),
-      PAX_SENCILLA: d.paxSencilla > 0 ? esc(d.paxSencilla) : '',
-      PAX_DOBLE: d.paxDoble > 0 ? esc(d.paxDoble) : '',
-      SUB_SENCILLA: d.paxSencilla > 0 ? money(d.hospedaje.subSencilla) : '$ -',
-      SUB_DOBLE: d.paxDoble > 0 ? money(d.hospedaje.subDoble) : '$ -',
-      TOTAL_HOSPEDAJE: money(d.hospedaje.total),
+      BLOQUE_HOSPEDAJE: bloqueHospedaje(d, config),
       PRECIO_DESAYUNO: money(config.comidas_extra.desayuno.precio),
       PRECIO_COMIDA: money(config.comidas_extra.comida.precio),
       PRECIO_CENA: money(config.comidas_extra.cena.precio),

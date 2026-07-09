@@ -102,6 +102,7 @@
     /* ===== Tabla principal ===== */
     table.principal {
       width: 100%;
+      table-layout: fixed;
       border-collapse: collapse;
       margin-top: 6px;
       border-left: 3px solid #1a1a1a;
@@ -201,34 +202,10 @@
     <div class="saludo">Es para nosotros un gusto poder atender su solicitud de estancia, Casa Kuxtal. Con base en lo solicitado anexo lo siguiente:</div>
 
     <table class="principal">
-      <tr>
-        <td class="hdr col-concepto">HOSPEDAJE</td>
-        <td class="hdr-blanco col-a">HAB SENCILLA</td>
-        <td class="hdr-blanco col-b">HAB DOBLE</td>
-        <td class="col-c"></td>
-      </tr>
-      <tr>
-        <td class="gris-centro">COSTO POR PERSONA, POR NOCHE</td>
-        <td class="col-a">{{PRECIO_SENCILLA}}</td>
-        <td class="col-b">{{PRECIO_DOBLE}}</td>
-        <td class="col-c"></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td class="col-a">{{PAX_SENCILLA}}</td>
-        <td class="col-b">{{PAX_DOBLE}}</td>
-        <td class="col-c"></td>
-      </tr>
-      <tr>
-        <td class="chico">INCLUYE 3 ALIMENTOS POR NOCHE PAGADA, POR PERSONA</td>
-        <td class="col-a">{{SUB_SENCILLA}}</td>
-        <td class="col-b">{{SUB_DOBLE}}</td>
-        <td class="col-c">$ -</td>
-      </tr>
-      <tr>
-        <td class="banda">TOTAL HOSPEDAJE</td>
-        <td class="banda-val" colspan="3">{{TOTAL_HOSPEDAJE}}</td>
-      </tr>
+      <colgroup>
+        <col style="width:47%" /><col style="width:19%" /><col style="width:18%" /><col style="width:16%" />
+      </colgroup>
+      {{BLOQUE_HOSPEDAJE}}
       <tr>
         <td></td>
         <td class="hdr-blanco" colspan="3">ALIMENTOS REQUERIDOS</td>
