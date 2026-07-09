@@ -119,6 +119,51 @@ input[readonly] { background: var(--durazno); color: var(--morado-oscuro); font-
   .manual { grid-template-columns: 1fr; }
 }
 
+.sub-titulo {
+  margin: 22px 0 4px;
+  font-size: 13.5px;
+  color: var(--morado);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  border-top: 1px dashed var(--lila);
+  padding-top: 14px;
+}
+
+.personalizado {
+  display: grid;
+  grid-template-columns: 200px 140px 1fr 34px;
+  gap: 10px;
+  align-items: center;
+  padding: 6px 0;
+}
+.personalizado input { margin-top: 0; }
+.personalizado .pers-quitar {
+  background: none;
+  border: 1px solid var(--lila);
+  color: var(--morado-oscuro);
+  border-radius: 6px;
+  height: 34px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.personalizado .pers-quitar:hover { background: var(--durazno); border-color: var(--salmon); }
+@media (max-width: 640px) {
+  .personalizado { grid-template-columns: 1fr 1fr; }
+}
+
+#btnAgregarPersonalizado {
+  background: #fff;
+  border: 1px dashed var(--morado);
+  color: var(--morado);
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}
+#btnAgregarPersonalizado:hover { background: var(--lila-fondo); }
+
 .anticipo-acciones button {
   background: #fff;
   border: 1px solid var(--salmon);

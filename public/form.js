@@ -34,6 +34,24 @@ document.querySelectorAll('input, select').forEach((el) => {
   el.addEventListener('change', calcular);
 });
 
+// Servicios personalizados: filas dinámicas
+$('btnAgregarPersonalizado').addEventListener('click', () => {
+  const fila = document.createElement('div');
+  fila.className = 'personalizado';
+  fila.innerHTML = `
+    <input type="text" class="pers-nombre" placeholder="Nombre del servicio" />
+    <input type="number" class="pers-monto" min="0" step="0.01" placeholder="Monto $" />
+    <input type="text" class="pers-desc" placeholder="Descripción (opcional)" />
+    <button type="button" class="pers-quitar" title="Eliminar fila">✕</button>`;
+  fila.querySelectorAll('input').forEach((el) => el.addEventListener('input', calcular));
+  fila.querySelector('.pers-quitar').addEventListener('click', () => {
+    fila.remove();
+    calcular();
+  });
+  $('personalizados').appendChild(fila);
+  fila.querySelector('.pers-nombre').focus();
+});
+
 $('btnUsarSugerido').addEventListener('click', () => {
   const { totales } = calcular();
   $('anticipo').value = totales.anticipoSugerido.toFixed(2);
@@ -175,6 +193,23 @@ function calcular() {
         nombre: div.dataset.label,
         importe: monto,
         descripcion: div.querySelector('.manual-desc').value.trim(),
+      });
+    }
+  });
+
+  // Servicios personalizados: con monto y nombre suman; con monto sin nombre bloquean;
+  // con nombre sin monto simplemente se ignoran (regla de no mostrar líneas en $0)
+  document.querySelectorAll('#personalizados .personalizado').forEach((fila) => {
+    const nombre = fila.querySelector('.pers-nombre').value.trim();
+    const monto = parseFloat(fila.querySelector('.pers-monto').value);
+    const tieneMonto = Number.isFinite(monto) && monto > 0;
+    if (tieneMonto && !nombre) {
+      errores.push('Falta el nombre del servicio personalizado.');
+    } else if (tieneMonto && nombre) {
+      extras.push({
+        nombre,
+        importe: monto,
+        descripcion: fila.querySelector('.pers-desc').value.trim(),
       });
     }
   });
