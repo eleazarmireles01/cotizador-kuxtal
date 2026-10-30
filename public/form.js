@@ -69,8 +69,11 @@ function calcular() {
   const errores = [];
   const paxDoble = num('paxDoble');
   const paxSencilla = num('paxSencilla');
+  const paxTriple = num('paxTriple');
   const paxDia = num('paxDia');
-  const paxHospedados = paxDoble + paxSencilla;
+  const habitacionesDobleSinAlimentos = num('habitacionesDobleSinAlimentos');
+  const paxDobleSinAlimentos = num('paxDobleSinAlimentos');
+  const paxHospedados = paxDoble + paxSencilla + paxTriple + paxDobleSinAlimentos;
   const participantes = paxHospedados + paxDia;
   $('participantes').value = participantes;
 
@@ -85,7 +88,7 @@ function calcular() {
       errores.push('La fecha de salida debe ser igual o posterior a la fecha de ingreso.');
     } else {
       noches = dias;
-      if (dias === 0 && paxHospedados > 0) {
+      if (dias === 0 && (paxHospedados > 0 || habitacionesDobleSinAlimentos > 0)) {
         errores.push('Si hay participantes hospedados, debe haber al menos 1 noche.');
       }
     }
@@ -97,15 +100,29 @@ function calcular() {
   if (paxDoble % 2 !== 0) {
     errores.push('Pax en habitación doble debe ser un número par (2 personas por habitación).');
   }
+  if (paxTriple % 3 !== 0) {
+    errores.push('Pax en habitación triple debe ser múltiplo de 3 (3 personas por habitación).');
+  }
+  if (habitacionesDobleSinAlimentos > 0) {
+    const min = habitacionesDobleSinAlimentos;
+    const max = habitacionesDobleSinAlimentos * 2;
+    if (paxDobleSinAlimentos < min || paxDobleSinAlimentos > max) {
+      errores.push('El número de personas no coincide con las habitaciones sin alimentos indicadas (mínimo 1, máximo 2 por habitación).');
+    }
+  }
 
-  // --- Hospedaje mixto: (2500×doble + 3800×sencilla) × noches ---
+  // --- Hospedaje mixto: (2500×doble + 3800×sencilla + 2200×triple) × noches + (habitaciones×2500) × noches ---
   const pDoble = config.hospedaje.doble.precio;
   const pSencilla = config.hospedaje.sencilla.precio;
+  const pTriple = config.hospedaje.triple.precio;
+  const pDobleSinAlimentos = config.hospedaje.doble_sin_alimentos.precio;
   const hospedaje = {
     subDoble: pDoble * paxDoble * noches,
     subSencilla: pSencilla * paxSencilla * noches,
+    subTriple: pTriple * paxTriple * noches,
+    subDobleSinAlimentos: pDobleSinAlimentos * habitacionesDobleSinAlimentos * noches,
   };
-  hospedaje.total = hospedaje.subDoble + hospedaje.subSencilla;
+  hospedaje.total = hospedaje.subDoble + hospedaje.subSencilla + hospedaje.subTriple + hospedaje.subDobleSinAlimentos;
 
   if (participantes <= 0) errores.push('Indica al menos un participante (hospedado o de uso de día).');
 
@@ -249,6 +266,9 @@ function calcular() {
     fechaSalida: fechaCorta($('fechaSalida').value),
     paxDoble,
     paxSencilla,
+    paxTriple,
+    habitacionesDobleSinAlimentos,
+    paxDobleSinAlimentos,
     paxDia,
     noches,
     participantes,

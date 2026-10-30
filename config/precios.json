@@ -1,7 +1,9 @@
 {
   "hospedaje": {
     "doble": { "precio": 2500, "unidad": "persona/noche" },
-    "sencilla": { "precio": 3800, "unidad": "persona/noche" }
+    "sencilla": { "precio": 3800, "unidad": "persona/noche" },
+    "triple": { "precio": 2200, "unidad": "persona/noche" },
+    "doble_sin_alimentos": { "precio": 2500, "unidad": "habitación/noche" }
   },
   "alimentos_incluidos": "3 tipo bufete por noche pagada, no incluye bebidas alcohólicas",
   "extras": {

@@ -27,8 +27,15 @@ function dataUri(file) {
 }
 
 function bloqueHospedaje(d, config) {
-  if (!(d.paxDoble > 0) && !(d.paxSencilla > 0)) return ''; // evento de puro día: sin sección de hospedaje
-  return `
+  const tieneDobleSencilla = d.paxDoble > 0 || d.paxSencilla > 0;
+  const tieneTriple = d.paxTriple > 0;
+  const tieneDobleSinAlimentos = d.habitacionesDobleSinAlimentos > 0;
+  if (!tieneDobleSencilla && !tieneTriple && !tieneDobleSinAlimentos) return ''; // evento de puro día: sin sección de hospedaje
+
+  let filas = '';
+
+  if (tieneDobleSencilla) {
+    filas += `
       <tr>
         <td class="hdr col-concepto">HOSPEDAJE</td>
         <td class="hdr-blanco col-a">HAB SENCILLA</td>
@@ -52,11 +59,41 @@ function bloqueHospedaje(d, config) {
         <td class="col-a">${d.paxSencilla > 0 ? money(d.hospedaje.subSencilla) : '$ -'}</td>
         <td class="col-b">${d.paxDoble > 0 ? money(d.hospedaje.subDoble) : '$ -'}</td>
         <td class="col-c">$ -</td>
-      </tr>
+      </tr>`;
+  } else {
+    filas += `
+      <tr>
+        <td class="hdr" colspan="4">HOSPEDAJE</td>
+      </tr>`;
+  }
+
+  if (tieneTriple) {
+    filas += `
+      <tr>
+        <td>HOSPEDAJE TRIPLE<br /><span class="chico">${esc(d.paxTriple)} pax × ${esc(d.noches)} noche(s) × ${money(config.hospedaje.triple.precio)} · incluye alimentos</span></td>
+        <td class="col-a">${money(d.hospedaje.subTriple)}</td>
+        <td class="col-b"></td>
+        <td class="col-c"></td>
+      </tr>`;
+  }
+
+  if (tieneDobleSinAlimentos) {
+    filas += `
+      <tr>
+        <td>HOSPEDAJE DOBLE (SIN ALIMENTOS)<br /><span class="chico">${esc(d.habitacionesDobleSinAlimentos)} habitación(es), ${esc(d.paxDobleSinAlimentos)} pax × ${esc(d.noches)} noche(s) × ${money(config.hospedaje.doble_sin_alimentos.precio)}/habitación</span></td>
+        <td class="col-a">${money(d.hospedaje.subDobleSinAlimentos)}</td>
+        <td class="col-b"></td>
+        <td class="col-c"></td>
+      </tr>`;
+  }
+
+  filas += `
       <tr>
         <td class="banda">TOTAL HOSPEDAJE</td>
         <td class="banda-val" colspan="3">${money(d.hospedaje.total)}</td>
       </tr>`;
+
+  return filas;
 }
 
 function filaCoffee(coffee, incluye) {
