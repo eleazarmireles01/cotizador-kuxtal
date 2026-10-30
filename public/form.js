@@ -270,8 +270,9 @@ function calcular() {
   }
   const descuentoMotivo = $('descuentoMotivo').value.trim();
 
+  const aplicarIva = $('aplicarIva').checked;
   const subtotalSinIva = totalMasExtras - descuento;
-  const iva = subtotalSinIva * ivaPct;
+  const iva = aplicarIva ? subtotalSinIva * ivaPct : 0;
   const totalConIva = subtotalSinIva + iva;
   const totalPorPersona = participantes > 0 ? subtotalSinIva / participantes : 0;
   const anticipoSugerido = totalConIva * (config.anticipo_sugerido_pct / 100);
@@ -286,6 +287,7 @@ function calcular() {
     descuentoPct,
     descuentoMotivo,
     subtotalSinIva,
+    aplicaIva: aplicarIva,
     iva,
     subTotal: totalConIva,
     totalPorPersona,
@@ -300,7 +302,9 @@ function calcular() {
   if (descuento > 0) {
     partesDesglose.push(`Servicios ${money(totalMasExtras)}`, `Descuento -${money(descuento)}`);
   }
-  partesDesglose.push(`Subtotal ${money(subtotalSinIva)}`, `IVA ${money(iva)}`, `${participantes || '—'} participantes`);
+  partesDesglose.push(`Subtotal ${money(subtotalSinIva)}`);
+  partesDesglose.push(aplicarIva ? `IVA ${money(iva)}` : 'Sin IVA');
+  partesDesglose.push(`${participantes || '—'} participantes`);
   $('desgloseVivo').textContent = partesDesglose.join(' · ');
   $('totalVivo').textContent = money(totalConIva);
   $('errores').innerHTML = errores.map((e) => `<div class="error">⚠ ${e}</div>`).join('');

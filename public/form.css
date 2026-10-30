@@ -184,6 +184,23 @@ input[readonly] { background: var(--durazno); color: var(--morado-oscuro); font-
 }
 #btnAgregarPersonalizado:hover { background: var(--lila-fondo); }
 
+.iva-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--morado-oscuro);
+  cursor: pointer;
+}
+.iva-toggle input {
+  width: 38px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--morado);
+  cursor: pointer;
+}
+
 .anticipo-acciones button {
   background: #fff;
   border: 1px solid var(--salmon);

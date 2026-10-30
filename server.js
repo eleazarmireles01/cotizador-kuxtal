@@ -118,6 +118,16 @@ function bloqueDescuento(totales) {
       </tr>`;
 }
 
+function filaIva(totales) {
+  if (!totales.aplicaIva) return '';
+  return `
+      <tr>
+        <td class="durazno">IVA</td>
+        <td class="durazno" style="text-align:left;">$</td>
+        <td class="durazno" colspan="2" style="text-align:right;">${money(totales.iva).replace('$ ', '')}</td>
+      </tr>`;
+}
+
 function filaCoffee(coffee, incluye) {
   if (!coffee) return '';
   if (coffee.modo === 'incluido') {
@@ -210,7 +220,8 @@ app.post('/pdf', async (req, res) => {
       TOTAL_POR_PERSONA: money(d.totales.totalPorPersona).replace('$ ', ''),
       TOTAL_MAS_EXTRAS: money(d.totales.totalMasExtras).replace('$ ', ''),
       FILAS_DESCUENTO: bloqueDescuento(d.totales),
-      IVA: money(d.totales.iva).replace('$ ', ''),
+      FILA_IVA: filaIva(d.totales),
+      NOTA_IVA: d.totales.aplicaIva ? 'Precio + 16% de IVA.' : 'Precio sin IVA.',
       SUB_TOTAL: money(d.totales.subTotal).replace('$ ', ''),
       ANTICIPO_SIGNO: d.totales.anticipo != null ? '$' : '',
       ANTICIPO: d.totales.anticipo != null ? money(d.totales.anticipo).replace('$ ', '') : '',
