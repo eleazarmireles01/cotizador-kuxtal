@@ -42,8 +42,8 @@
           <label>Pax en habitación sencilla ($3,800 /persona/noche)
             <input type="number" id="paxSencilla" min="0" value="0" />
           </label>
-          <label>Pax en habitación triple ($2,200 /persona/noche, múltiplos de 3)
-            <input type="number" id="paxTriple" min="0" step="3" value="0" />
+          <label>Pax en habitación triple ($2,200 /persona/noche)
+            <input type="number" id="paxTriple" min="0" value="0" />
           </label>
           <label>Participantes de uso de día (sin hospedaje)
             <input type="number" id="paxDia" min="0" value="0" />
@@ -155,37 +155,64 @@
 
       <section>
         <h2>Servicios manuales</h2>
-        <p class="nota">Monto directo, sin multiplicar. Descripción opcional (aparece en el PDF debajo del concepto).</p>
+        <p class="nota">Monto directo, sin multiplicar. Descripción opcional (aparece en el PDF debajo del concepto). Marca "Servicio propio" solo si este concepto debe entrar a la base del descuento de Casa Kuxtal.</p>
         <div class="manual" data-key="open_bar_nacional" data-label="Open bar nacional">
           <span class="manual-label">Open bar nacional</span>
           <input type="number" class="manual-monto" min="0" step="0.01" placeholder="Monto $" />
           <input type="text" class="manual-desc" placeholder="Descripción (opcional)" />
+          <label class="manual-check"><input type="checkbox" class="manual-descontable" /> Servicio propio de Kuxtal (aplica descuento)</label>
         </div>
         <div class="manual" data-key="open_bar_importada" data-label="Open bar importada">
           <span class="manual-label">Open bar importada</span>
           <input type="number" class="manual-monto" min="0" step="0.01" placeholder="Monto $" />
           <input type="text" class="manual-desc" placeholder="Descripción (opcional)" />
+          <label class="manual-check"><input type="checkbox" class="manual-descontable" /> Servicio propio de Kuxtal (aplica descuento)</label>
         </div>
         <div class="manual" data-key="traslados" data-label="Traslados">
           <span class="manual-label">Traslados</span>
           <input type="number" class="manual-monto" min="0" step="0.01" placeholder="Monto $" />
           <input type="text" class="manual-desc" placeholder="Descripción (opcional)" />
+          <label class="manual-check"><input type="checkbox" class="manual-descontable" /> Servicio propio de Kuxtal (aplica descuento)</label>
         </div>
         <div class="manual" data-key="mobiliario_extra" data-label="Mobiliario extra">
           <span class="manual-label">Mobiliario extra</span>
           <input type="number" class="manual-monto" min="0" step="0.01" placeholder="Monto $" />
           <input type="text" class="manual-desc" placeholder="Descripción (opcional)" />
+          <label class="manual-check"><input type="checkbox" class="manual-descontable" /> Servicio propio de Kuxtal (aplica descuento)</label>
         </div>
         <div class="manual" data-key="musica_dj" data-label="Música / DJ">
           <span class="manual-label">Música / DJ</span>
           <input type="number" class="manual-monto" min="0" step="0.01" placeholder="Monto $" />
           <input type="text" class="manual-desc" placeholder="Descripción (opcional)" />
+          <label class="manual-check"><input type="checkbox" class="manual-descontable" /> Servicio propio de Kuxtal (aplica descuento)</label>
         </div>
 
         <h3 class="sub-titulo">Servicios personalizados</h3>
         <p class="nota">Conceptos libres, monto directo. Las filas sin monto no suman ni aparecen en el PDF.</p>
         <div id="personalizados"></div>
         <button type="button" id="btnAgregarPersonalizado">+ Agregar servicio personalizado</button>
+      </section>
+
+      <section>
+        <h2>Descuento</h2>
+        <div class="grid">
+          <label>Modo
+            <select id="descuentoModo">
+              <option value="ninguno">Sin descuento</option>
+              <option value="porcentaje">Porcentaje (%)</option>
+              <option value="monto">Monto fijo ($)</option>
+            </select>
+          </label>
+          <label id="descuentoValorLabel" style="display:none">
+            <span id="descuentoValorTexto">Valor del descuento</span>
+            <input type="number" id="descuentoValor" min="0" step="0.01" value="0" />
+          </label>
+          <label id="descuentoMotivoLabel" style="display:none">
+            Motivo del descuento (opcional)
+            <input type="text" id="descuentoMotivo" placeholder="Ej. Cliente recurrente" />
+          </label>
+        </div>
+        <p class="nota">Solo aplica sobre servicios propios de Casa Kuxtal: hospedaje (todos los tipos), alimentos extra, coffee break y extras del catálogo (fogata, salón, temazcal, talleres, gongs, caldera) — ya con cortesías aplicadas. Los servicios manuales y personalizados quedan fuera salvo que marques su casilla "Servicio propio".</p>
       </section>
 
       <section>

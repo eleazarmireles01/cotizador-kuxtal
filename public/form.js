@@ -42,8 +42,10 @@ $('btnAgregarPersonalizado').addEventListener('click', () => {
     <input type="text" class="pers-nombre" placeholder="Nombre del servicio" />
     <input type="number" class="pers-monto" min="0" step="0.01" placeholder="Monto $" />
     <input type="text" class="pers-desc" placeholder="Descripción (opcional)" />
+    <label class="pers-check"><input type="checkbox" class="pers-descontable" /> Servicio propio (aplica descuento)</label>
     <button type="button" class="pers-quitar" title="Eliminar fila">✕</button>`;
   fila.querySelectorAll('input').forEach((el) => el.addEventListener('input', calcular));
+  fila.querySelectorAll('input[type="checkbox"]').forEach((el) => el.addEventListener('change', calcular));
   fila.querySelector('.pers-quitar').addEventListener('click', () => {
     fila.remove();
     calcular();
@@ -51,6 +53,19 @@ $('btnAgregarPersonalizado').addEventListener('click', () => {
   $('personalizados').appendChild(fila);
   fila.querySelector('.pers-nombre').focus();
 });
+
+// Descuento: muestra/oculta valor y motivo según el modo
+const toggleDescuento = () => {
+  const modo = $('descuentoModo').value;
+  const mostrar = modo !== 'ninguno';
+  $('descuentoValorLabel').style.display = mostrar ? '' : 'none';
+  $('descuentoMotivoLabel').style.display = mostrar ? '' : 'none';
+  $('descuentoValorTexto').textContent = modo === 'porcentaje' ? 'Porcentaje de descuento (%)' : 'Monto del descuento ($)';
+  if (modo === 'porcentaje') $('descuentoValor').setAttribute('max', '100');
+  else $('descuentoValor').removeAttribute('max');
+};
+$('descuentoModo').addEventListener('change', toggleDescuento);
+toggleDescuento();
 
 $('btnUsarSugerido').addEventListener('click', () => {
   const { totales } = calcular();
@@ -97,17 +112,13 @@ function calcular() {
   }
   $('noches').value = noches;
 
-  if (paxDoble % 2 !== 0) {
-    errores.push('Pax en habitación doble debe ser un número par (2 personas por habitación).');
-  }
-  if (paxTriple % 3 !== 0) {
-    errores.push('Pax en habitación triple debe ser múltiplo de 3 (3 personas por habitación).');
-  }
+  // Doble y triple son tarifas por persona: cualquier número de pax es válido, sin
+  // restricción de paridad ni múltiplos (una habitación física puede ir sub-ocupada).
   if (habitacionesDobleSinAlimentos > 0) {
     const min = habitacionesDobleSinAlimentos;
     const max = habitacionesDobleSinAlimentos * 2;
     if (paxDobleSinAlimentos < min || paxDobleSinAlimentos > max) {
-      errores.push('El número de personas no coincide con las habitaciones sin alimentos indicadas (mínimo 1, máximo 2 por habitación).');
+      errores.push('El número de personas no coincide con las habitaciones sin alimentos (mínimo 1, máximo 2 por habitación).');
     }
   }
 
@@ -163,21 +174,21 @@ function calcular() {
     else if (fp > f.capacidad_max) errores.push(`Fogata: capacidad máxima ${f.capacidad_max} pax (tienes ${fp}).`);
     else {
       const tier = f.tiers.find((t) => fp <= t.max_pax);
-      extras.push({ nombre: `Fogata (${fp} pax, ${f.duracion})`, importe: tier.precio });
+      extras.push({ nombre: `Fogata (${fp} pax, ${f.duracion})`, importe: tier.precio, descontable: true });
     }
   }
 
   if ($('salonCheck').checked) {
     const base = config.extras.salon_audiovisual.precio_base;
     const pct = Math.min(100, Math.max(0, num('salonCortesia')));
-    extras.push({ nombre: 'Salon con audiovisual', cortesiaPct: pct, importe: base * (1 - pct / 100) });
+    extras.push({ nombre: 'Salon con audiovisual', cortesiaPct: pct, importe: base * (1 - pct / 100), descontable: true });
   }
 
   if ($('temazcalCheck').checked) {
     const tp = num('temazcalPax');
     const t = config.extras.temazcal;
     if (tp < t.minimo_pax) errores.push(`Temazcal: mínimo ${t.minimo_pax} pax (tienes ${tp}).`);
-    else extras.push({ nombre: `Temazcal (${tp} pax)`, importe: t.precio * tp });
+    else extras.push({ nombre: `Temazcal (${tp} pax)`, importe: t.precio * tp, descontable: true });
   }
 
   for (const [check, paxId, key, nombre] of [
@@ -188,7 +199,7 @@ function calcular() {
       const tp = num(paxId);
       const t = config.extras[key];
       if (tp < t.minimo_pax) errores.push(`${nombre}: mínimo ${t.minimo_pax} pax (tienes ${tp}).`);
-      else extras.push({ nombre: `${nombre} (${tp} pax)`, importe: t.precio * tp, descripcion: `Incluye ${t.incluye}` });
+      else extras.push({ nombre: `${nombre} (${tp} pax)`, importe: t.precio * tp, descripcion: `Incluye ${t.incluye}`, descontable: true });
     }
   }
 
@@ -196,11 +207,11 @@ function calcular() {
     const g = config.extras.noche_gongs;
     if (participantes < g.minimo_pax)
       errores.push(`Noche de Gongs: el evento requiere mínimo ${g.minimo_pax} participantes (tienes ${participantes}).`);
-    else extras.push({ nombre: 'Noche de Gongs', importe: g.precio });
+    else extras.push({ nombre: 'Noche de Gongs', importe: g.precio, descontable: true });
   }
 
   if ($('calderaCheck').checked) {
-    extras.push({ nombre: 'Caldera de alberca', importe: config.extras.caldera_alberca.precio });
+    extras.push({ nombre: 'Caldera de alberca', importe: config.extras.caldera_alberca.precio, descontable: true });
   }
 
   document.querySelectorAll('.manual').forEach((div) => {
@@ -210,6 +221,7 @@ function calcular() {
         nombre: div.dataset.label,
         importe: monto,
         descripcion: div.querySelector('.manual-desc').value.trim(),
+        descontable: div.querySelector('.manual-descontable').checked,
       });
     }
   });
@@ -227,37 +239,70 @@ function calcular() {
         nombre,
         importe: monto,
         descripcion: fila.querySelector('.pers-desc').value.trim(),
+        descontable: fila.querySelector('.pers-descontable').checked,
       });
     }
   });
 
   const extrasTotal = extras.reduce((s, e) => s + e.importe, 0);
 
-  // --- Totales e IVA ---
+  // --- Totales, descuento e IVA ---
   const ivaPct = config.iva_pct / 100;
-  const totalMasExtras = hospedaje.total + alimentos.total + extrasTotal; // subtotal sin IVA
-  const iva = totalMasExtras * ivaPct;
-  const subTotal = totalMasExtras + iva; // total con IVA
-  const totalPorPersona = participantes > 0 ? totalMasExtras / participantes : 0;
-  const anticipoSugerido = subTotal * (config.anticipo_sugerido_pct / 100);
+  const totalMasExtras = hospedaje.total + alimentos.total + extrasTotal; // suma de TODAS las líneas, sin cambios
+
+  // Base descontable: hospedaje (todos los tipos) + alimentos (ya con cortesías) +
+  // extras del catálogo marcados descontable:true (manuales/personalizados solo si su casilla está activa)
+  const extrasDescontables = extras.filter((e) => e.descontable).reduce((s, e) => s + e.importe, 0);
+  const baseDescontable = hospedaje.total + alimentos.total + extrasDescontables;
+
+  const descuentoModo = $('descuentoModo').value; // 'ninguno' | 'porcentaje' | 'monto'
+  const descuentoValor = num('descuentoValor');
+  let descuento = 0;
+  let descuentoPct = null;
+  if (descuentoModo === 'porcentaje' && descuentoValor > 0) {
+    descuentoPct = Math.min(100, descuentoValor);
+    descuento = baseDescontable * (descuentoPct / 100);
+  } else if (descuentoModo === 'monto' && descuentoValor > 0) {
+    descuento = descuentoValor;
+    if (descuento > baseDescontable) {
+      errores.push('El descuento no puede ser mayor que el total de servicios propios de Casa Kuxtal.');
+    }
+  }
+  const descuentoMotivo = $('descuentoMotivo').value.trim();
+
+  const subtotalSinIva = totalMasExtras - descuento;
+  const iva = subtotalSinIva * ivaPct;
+  const totalConIva = subtotalSinIva + iva;
+  const totalPorPersona = participantes > 0 ? subtotalSinIva / participantes : 0;
+  const anticipoSugerido = totalConIva * (config.anticipo_sugerido_pct / 100);
 
   const anticipoRaw = $('anticipo').value.trim();
   const anticipo = anticipoRaw === '' ? null : Math.max(0, parseFloat(anticipoRaw) || 0);
 
   const totales = {
     totalMasExtras,
+    descuento,
+    descuentoModo,
+    descuentoPct,
+    descuentoMotivo,
+    subtotalSinIva,
     iva,
-    subTotal,
+    subTotal: totalConIva,
     totalPorPersona,
     anticipo,
     anticipoSugerido,
-    totalPorPagar: subTotal,
+    totalPorPagar: totalConIva,
   };
 
   // --- UI en vivo ---
   $('anticipoSugerido').textContent = `Sugerido (${config.anticipo_sugerido_pct}%): ${money(anticipoSugerido)}`;
-  $('desgloseVivo').textContent = `Subtotal ${money(totalMasExtras)} · IVA ${money(iva)} · ${participantes || '—'} participantes`;
-  $('totalVivo').textContent = money(subTotal);
+  const partesDesglose = [];
+  if (descuento > 0) {
+    partesDesglose.push(`Servicios ${money(totalMasExtras)}`, `Descuento -${money(descuento)}`);
+  }
+  partesDesglose.push(`Subtotal ${money(subtotalSinIva)}`, `IVA ${money(iva)}`, `${participantes || '—'} participantes`);
+  $('desgloseVivo').textContent = partesDesglose.join(' · ');
+  $('totalVivo').textContent = money(totalConIva);
   $('errores').innerHTML = errores.map((e) => `<div class="error">⚠ ${e}</div>`).join('');
 
   return {

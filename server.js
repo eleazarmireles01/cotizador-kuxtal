@@ -96,6 +96,28 @@ function bloqueHospedaje(d, config) {
   return filas;
 }
 
+function bloqueDescuento(totales) {
+  if (!totales.descuento || totales.descuento <= 0) return '';
+  const etiqueta =
+    totales.descuentoModo === 'porcentaje'
+      ? `DESCUENTO (${esc(totales.descuentoPct)}% SOBRE SERVICIOS CASA KUXTAL)`
+      : 'DESCUENTO (MONTO FIJO SOBRE SERVICIOS CASA KUXTAL)';
+  const motivo = totales.descuentoMotivo
+    ? `<br /><span class="desc-extra">${esc(totales.descuentoMotivo)}</span>`
+    : '';
+  return `
+      <tr>
+        <td class="durazno">${etiqueta}${motivo}</td>
+        <td class="durazno" style="text-align:left;">-$</td>
+        <td class="durazno" colspan="2" style="text-align:right;">${money(totales.descuento).replace('$ ', '')}</td>
+      </tr>
+      <tr>
+        <td class="durazno">TOTAL CON DESCUENTO</td>
+        <td class="durazno" style="text-align:left;">$</td>
+        <td class="durazno" colspan="2" style="text-align:right;">${money(totales.subtotalSinIva).replace('$ ', '')}</td>
+      </tr>`;
+}
+
 function filaCoffee(coffee, incluye) {
   if (!coffee) return '';
   if (coffee.modo === 'incluido') {
@@ -187,6 +209,7 @@ app.post('/pdf', async (req, res) => {
       NOCHES: esc(d.noches),
       TOTAL_POR_PERSONA: money(d.totales.totalPorPersona).replace('$ ', ''),
       TOTAL_MAS_EXTRAS: money(d.totales.totalMasExtras).replace('$ ', ''),
+      FILAS_DESCUENTO: bloqueDescuento(d.totales),
       IVA: money(d.totales.iva).replace('$ ', ''),
       SUB_TOTAL: money(d.totales.subTotal).replace('$ ', ''),
       ANTICIPO_SIGNO: d.totales.anticipo != null ? '$' : '',
